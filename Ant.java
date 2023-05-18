@@ -22,6 +22,7 @@ public class Ant {
         J.removeAll(J);
         //add id of nodes adjacent to last node in path
         for (int i = 0; i < Simulator.G.adj.get(path.get(path.size()-1)).size(); i++) {
+            //only add nodes that are not in path
             if(!this.path.contains(Simulator.G.adj.get(path.get(path.size()-1)).get(i).id))
             {
                 J.add(Simulator.G.adj.get(path.get(path.size()-1)).get(i).id);

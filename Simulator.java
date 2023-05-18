@@ -3,7 +3,7 @@ package prelim;
 import java.util.*;
 
 public class Simulator {
-    public static double simulationTime = 30;
+    public static double simulationTime = 1;
     public static double alfa = 1;
     public static double beta = 1;
     public static double gama = 1;
@@ -44,12 +44,24 @@ public class Simulator {
         G.adj.add(new ArrayList<Node>());
 
         // Add edges
-        G.addEdge(0, 1, 5, 0.0);
-        G.addEdge(0, 2, 3, 0.0);
-        G.addEdge(0, 3, 20, 0.0);
+        G.addEdge(0, 1, 3, 0.0);
+        G.addEdge(0, 2, 6, 0.0);
+        G.addEdge(0, 3, 6, 0.0);
+        G.addEdge(0, 4, 2, 0.0);
         G.addEdge(1, 2, 3, 0.0);
         G.addEdge(1, 3, 2, 0.0);
-        G.addEdge(2, 3, 5, 0.0);
+        G.addEdge(1, 4, 5, 0.0);
+        G.addEdge(3, 4, 1, 0.0);
+
+
+        for (int i = 0; i < G.adj.size(); i++) {
+            for (int j = 0; j < G.adj.get(i).size(); j++) {
+                if (G.adj.get(i).get(j).weight <= 0) {
+                    System.out.println("Invalid inputs: All weights should be non-zero positive integers");
+                    return;
+                }
+            }
+        }
 
         G.printGraph();
 
@@ -57,7 +69,7 @@ public class Simulator {
         pec = new PEC();
 
         //add ants and AntMove events starting on node n1
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 10; i++) {
             ants.add(new Ant(i));
             pec.addEvPEC(new AntMove(i));
         }
