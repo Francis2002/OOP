@@ -1,6 +1,5 @@
 package prelim;
 
-import java.util.*;
 public abstract class Event {
 
     double alfa = Simulator.alfa;
@@ -12,9 +11,6 @@ public abstract class Event {
     double timeStamp;
 
     PEC pec = Simulator.pec;
-
-    //reference to adjacency list to avoid writing Simulator.G.adj, which difficults understaing of code
-    ArrayList<ArrayList<Node>> nodeList = Simulator.G.adj;
 
     public abstract void simulateEvent();
     

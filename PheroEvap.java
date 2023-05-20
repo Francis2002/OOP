@@ -16,13 +16,15 @@ public class PheroEvap extends Event {
     @Override
     public void simulateEvent(){
         System.out.println("Started PheroEvap event simulation:");
+
+        Simulator.eevents += 1;
         //decrement pheromone level of adjacency s->d and d->s
 
-        //find adjacency node with id==d in nodeList.get(s) 
-        Node adjNode = nodeList.get(s).get(0);      //default as first
-        for (int k = 0; k < nodeList.size(); k++) {
-            if (nodeList.get(s).get(k).id == d) {
-                adjNode = nodeList.get(s).get(k);
+        //find adjacency node with id==d in Simulator.G.getAdjList(s) 
+        Node adjNode = Simulator.G.getAdjList(s).get(0);      //default as first
+        for (int k = 0; k < Simulator.G.getSizeOf(s); k++) {
+            if (Simulator.G.getAdjList(s).get(k).id == d) {
+                adjNode = Simulator.G.getAdjList(s).get(k);
                 break;
             }
         }
@@ -33,11 +35,11 @@ public class PheroEvap extends Event {
             adjNode.phero = 0;
         }
 
-        //find adjacency node with id==s in nodeList.get(d) 
-        adjNode = nodeList.get(d).get(0);      //default as first
-        for (int k = 0; k < nodeList.size(); k++) {
-            if (nodeList.get(d).get(k).id == s) {
-                adjNode = nodeList.get(d).get(k);
+        //find adjacency node with id==s in Simulator.G.getAdjList(d) 
+        adjNode = Simulator.G.getAdjList(d).get(0);      //default as first
+        for (int k = 0; k < Simulator.G.getSizeOf(d); k++) {
+            if (Simulator.G.getAdjList(d).get(k).id == s) {
+                adjNode = Simulator.G.getAdjList(d).get(k);
                 break;
             }
         }
@@ -47,7 +49,7 @@ public class PheroEvap extends Event {
         if (adjNode.phero < 0) {
             adjNode.phero = 0;
         }
-        else
+        else 
         {
             pec.addEvPEC(new PheroEvap(s, d));          //only add one event beacuse adjacencies work in pairs, one event changes 2 adjacency nodes
         }

@@ -1,26 +1,29 @@
 package prelim;
 
 import java.util.*;
-public class Graph {
+public abstract class Graph {
 
-    // Create the graph
-    int V = 4;
-    ArrayList<ArrayList<Node>> adj = new ArrayList<ArrayList<Node>>(V);
+    int V;
 
-        // Add edge(source, destination, weight, pheromone level)
-    public void addEdge(int s, int d, int w, double f) {
-        adj.get(s).add(new Node(d, w, f));
-        adj.get(d).add(new Node(s, w, f));
-    }
+    public abstract void addEdge(int s, int d, int w);
 
-    // Print the graph
-    public void printGraph() {
-        for (int i = 0; i < adj.size(); i++) {
-        System.out.println("\nVertex " + i + ":");
-        for (int j = 0; j < adj.get(i).size(); j++) {
-            System.out.print(" -> " + adj.get(i).get(j).id);
+    public abstract void printGraph();
+
+    public abstract void validateWeights();
+
+    public abstract int getSizeOf(int nodeIndex);
+
+    public abstract List<Node> getAdjList(int index);
+
+    public abstract void fillWithRandomAdjacencies(int maxWeight);
+
+    public boolean checksDiracsTheorem()
+    {
+        for (int i = 0; i < V; i++) {
+            if (getSizeOf(i) < Math.round(((double)V)/2)) {
+                return false;
+            }
         }
-        System.out.println();
-        }
+        return true;
     }
 }
