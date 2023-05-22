@@ -69,27 +69,27 @@ public class AntMove extends Event{
             System.out.println("J set:" + this.ant.J);
             System.out.println("move probabilities:" + probs);
 
-            int maxDecimalDigits = maxDecimalDigits(probs);
+            /* int maxDecimalDigits = maxDecimalDigits(probs);
 
             double ci = 0;
             for (int i = 0; i < probs.size(); i++) {
                 ci += probs.get(i);
             }
 
-            int mult = (int)Math.pow(10, maxDecimalDigits);
+            int mult = (int)Math.pow(10, maxDecimalDigits); */
 
             Random rand = new Random();
 
             // Obtain a number between [0 - ci*10^maxDecimalDigits-1].
-            int lotteryNum = rand.nextInt((int)(ci*mult));
+            double lotteryNum = rand.nextDouble();
 
-            int currentProbBlock = 0;
+            double currentProbBlock = 0;
             for (int i = 0; i < probs.size(); i++) {
-                if (lotteryNum < probs.get(i)*mult + currentProbBlock) {
+                if (lotteryNum < probs.get(i) + currentProbBlock) {
                     this.target = this.ant.J.get(i);
                     break;
                 }
-                currentProbBlock += probs.get(i)*mult;
+                currentProbBlock += probs.get(i);
             }
         }
         //empty J set
@@ -105,6 +105,8 @@ public class AntMove extends Event{
 
             this.completedCycle = true;
         }
+
+        System.out.println("target is: " + this.target);
 
         //code to determine timeStamp
 
@@ -131,6 +133,7 @@ public class AntMove extends Event{
     @Override
     public void simulateEvent(){
         System.out.println("Started event simulation:");
+        System.out.println("J set was:" + ant.J);
 
         Simulator.mevents += 1;
 
@@ -217,6 +220,7 @@ public class AntMove extends Event{
                         }
                     }
                     //remove cycle
+                    System.out.println("target was: " + this.target);
                     System.out.println("i was " + i + " ant.path.size() was " + ant.path.size() + " ant.path was" + ant.path);
                     int antPathSizeBeforeRemove = ant.path.size();
                     for (int j = i; j < antPathSizeBeforeRemove; j++) 

@@ -125,5 +125,7 @@ public class Simulator {
             System.out.println("CurrentTime:" + currentTime + "; bestPathWeight:" + bestPathWeight + "; bestPath:" + bestPath + "\n");
             currentTime = currentEvent.timeStamp;
         }
+
+        G.printGraph();
     }
 }
