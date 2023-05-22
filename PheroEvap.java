@@ -20,34 +20,16 @@ public class PheroEvap extends Event {
         Simulator.eevents += 1;
         //decrement pheromone level of adjacency s->d and d->s
 
-        //find adjacency node with id==d in Simulator.G.getAdjList(s) 
-        Node adjNode = Simulator.G.getAdjList(s).get(0);      //default as first
-        for (int k = 0; k < Simulator.G.getSizeOf(s); k++) {
-            if (Simulator.G.getAdjList(s).get(k).id == d) {
-                adjNode = Simulator.G.getAdjList(s).get(k);
-                break;
-            }
-        }
-
         //if pheromone level becomes negative, set to zero
-        adjNode.phero -= ro;
-        if (adjNode.phero < 0) {
-            adjNode.phero = 0;
+        Simulator.G.setPheroOfEdge(s, d, Simulator.G.getPheroOfEdge(s, d) - ro);
+        if (Simulator.G.getPheroOfEdge(s, d) < 0) {
+            Simulator.G.setPheroOfEdge(s, d, 0);
         }
 
         //find adjacency node with id==s in Simulator.G.getAdjList(d) 
-        adjNode = Simulator.G.getAdjList(d).get(0);      //default as first
-        for (int k = 0; k < Simulator.G.getSizeOf(d); k++) {
-            if (Simulator.G.getAdjList(d).get(k).id == s) {
-                adjNode = Simulator.G.getAdjList(d).get(k);
-                break;
-            }
-        }
-
-        //if pheromone level becomes negative, set to zero
-        adjNode.phero -= ro;
-        if (adjNode.phero < 0) {
-            adjNode.phero = 0;
+        Simulator.G.setPheroOfEdge(d, s, Simulator.G.getPheroOfEdge(d, s) - ro);
+        if (Simulator.G.getPheroOfEdge(d, s) < 0) {
+            Simulator.G.setPheroOfEdge(d, s, 0);
         }
         else 
         {

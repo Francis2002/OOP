@@ -9,6 +9,10 @@ public class ACO extends Algorithm {
         ACO.ants = new ArrayList<Ant>();
     }
 
+    public static Ant getAnt(int index){
+        return ants.get(index);
+    }
+
     @Override
     public void init(){
 

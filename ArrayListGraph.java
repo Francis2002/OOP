@@ -59,11 +59,11 @@ public class ArrayListGraph extends Graph{
         }
     }
 
-    public int getSizeOf(int nodeIndex){
+    public int getNumberOfAdjacenciesOf(int nodeIndex){
         return adj.get(nodeIndex).size();
     }
 
-    public List<Node> getAdjList(int index){
+    public List<Node> getAdjacenciesOf(int index){
         return adj.get(index);
     }
 
@@ -86,4 +86,43 @@ public class ArrayListGraph extends Graph{
         }
     }
 
+    public int getWeightOfEdge(int s, int d){
+        Node currentAdjNode = Simulator.G.getAdjacenciesOf(s).get(0); //default as first
+
+        //find adjacency node with id==J.get(i) in Simulator.G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
+        for (int j = 0; j < Simulator.G.getNumberOfAdjacenciesOf(s); j++) {
+            if (Simulator.G.getAdjacenciesOf(s).get(j).id == d) {
+                currentAdjNode = Simulator.G.getAdjacenciesOf(s).get(j);
+                break;
+            }
+        }
+        return currentAdjNode.weight;
+    }
+
+    public double getPheroOfEdge(int s, int d){
+        Node currentAdjNode = (Node)Simulator.G.getAdjacenciesOf(s).get(0); //default as first
+
+        //find adjacency node with id==J.get(i) in Simulator.G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
+        for (int j = 0; j < Simulator.G.getNumberOfAdjacenciesOf(s); j++) {
+            if (Simulator.G.getAdjacenciesOf(s).get(j).id == d) {
+                currentAdjNode = (Node)Simulator.G.getAdjacenciesOf(s).get(j);
+                break;
+            }
+        }
+        return currentAdjNode.phero;
+    }
+
+    public void setPheroOfEdge(int s, int d, double level){
+        Node currentAdjNode = (Node)Simulator.G.getAdjacenciesOf(s).get(0); //default as first
+
+        //find adjacency node with id==J.get(i) in Simulator.G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
+        for (int j = 0; j < Simulator.G.getNumberOfAdjacenciesOf(s); j++) {
+            if (Simulator.G.getAdjacenciesOf(s).get(j).id == d) {
+                currentAdjNode = (Node)Simulator.G.getAdjacenciesOf(s).get(j);
+                break;
+            }
+        }
+        
+        currentAdjNode.setPhero(level);
+    }
 }

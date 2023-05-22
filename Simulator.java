@@ -90,16 +90,6 @@ public class Simulator {
 
         G = new ArrayListGraph(n);
 
-        // Add edges
-        /* G.addEdge(0, 1, 3);
-        G.addEdge(0, 2, 6);
-        G.addEdge(0, 3, 6);
-        G.addEdge(0, 4, 2);
-        G.addEdge(1, 2, 3);
-        G.addEdge(1, 3, 2);
-        G.addEdge(1, 4, 5);
-        G.addEdge(3, 4, 1); */
-
         G.fillWithRandomAdjacencies(a);
 
         G.validateWeights();

@@ -10,4 +10,21 @@ public class Node {
         this.id = id;
         this.weight = weight;
     }
+
+    public int getId(){
+        return id;
+    }
+
+    public int getWeight(){
+        return weight;
+    }
+
+    public double getPhero(){
+        return phero;
+    }
+
+    public void setPhero(double level)
+    {
+        phero = level;
+    }
 }
