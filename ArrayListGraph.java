@@ -10,7 +10,7 @@ public class ArrayListGraph extends Graph{
         this.V = v;
         this.adj = new ArrayList<ArrayList<Node>>(v);
 
-        //head of list of adjacencies of a node with id i will be on index i of Simulator.G.adj
+        //head of list of adjacencies of a node with id i will be on index i of G.adj
         for (int i = 0; i < V; i++)
             adj.add(new ArrayList<Node>());
     }
@@ -87,12 +87,12 @@ public class ArrayListGraph extends Graph{
     }
 
     public int getWeightOfEdge(int s, int d){
-        Node currentAdjNode = Simulator.G.getAdjacenciesOf(s).get(0); //default as first
+        Node currentAdjNode = getAdjacenciesOf(s).get(0); //default as first
 
-        //find adjacency node with id==J.get(i) in Simulator.G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
-        for (int j = 0; j < Simulator.G.getNumberOfAdjacenciesOf(s); j++) {
-            if (Simulator.G.getAdjacenciesOf(s).get(j).id == d) {
-                currentAdjNode = Simulator.G.getAdjacenciesOf(s).get(j);
+        //find adjacency node with id==J.get(i) in G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
+        for (int j = 0; j < getNumberOfAdjacenciesOf(s); j++) {
+            if (getAdjacenciesOf(s).get(j).id == d) {
+                currentAdjNode = getAdjacenciesOf(s).get(j);
                 break;
             }
         }
@@ -100,12 +100,12 @@ public class ArrayListGraph extends Graph{
     }
 
     public double getPheroOfEdge(int s, int d){
-        Node currentAdjNode = (Node)Simulator.G.getAdjacenciesOf(s).get(0); //default as first
+        Node currentAdjNode = getAdjacenciesOf(s).get(0); //default as first
 
-        //find adjacency node with id==J.get(i) in Simulator.G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
-        for (int j = 0; j < Simulator.G.getNumberOfAdjacenciesOf(s); j++) {
-            if (Simulator.G.getAdjacenciesOf(s).get(j).id == d) {
-                currentAdjNode = (Node)Simulator.G.getAdjacenciesOf(s).get(j);
+        //find adjacency node with id==J.get(i) in G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
+        for (int j = 0; j < getNumberOfAdjacenciesOf(s); j++) {
+            if (getAdjacenciesOf(s).get(j).id == d) {
+                currentAdjNode = getAdjacenciesOf(s).get(j);
                 break;
             }
         }
@@ -113,12 +113,12 @@ public class ArrayListGraph extends Graph{
     }
 
     public void setPheroOfEdge(int s, int d, double level){
-        Node currentAdjNode = (Node)Simulator.G.getAdjacenciesOf(s).get(0); //default as first
+        Node currentAdjNode = getAdjacenciesOf(s).get(0); //default as first
 
-        //find adjacency node with id==J.get(i) in Simulator.G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
-        for (int j = 0; j < Simulator.G.getNumberOfAdjacenciesOf(s); j++) {
-            if (Simulator.G.getAdjacenciesOf(s).get(j).id == d) {
-                currentAdjNode = (Node)Simulator.G.getAdjacenciesOf(s).get(j);
+        //find adjacency node with id==J.get(i) in G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
+        for (int j = 0; j < getNumberOfAdjacenciesOf(s); j++) {
+            if (getAdjacenciesOf(s).get(j).id == d) {
+                currentAdjNode = getAdjacenciesOf(s).get(j);
                 break;
             }
         }

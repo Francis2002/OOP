@@ -9,13 +9,12 @@ public class PrintObservation extends Event{
     }
 
     @Override
-    public void simulateEvent(){
+    public void simulateEvent(double currentTime){
         System.out.println("Observation " + num + ":");
-        System.out.println("\t Present instant:\t\t" + Simulator.currentTime);
-        System.out.println("\t Number of move events:\t\t" + Simulator.mevents);
-        System.out.println("\t Number of evaporation events:\t" + Simulator.eevents);
-        System.out.println("\t Best Hamiltonian cycle:\t" + Simulator.bestPath + ":" + Simulator.bestPathWeight);
+        System.out.println("\t Present instant:\t\t" + currentTime);
+        System.out.println("\t Number of move events:\t\t" + ACO.mevents);
+        System.out.println("\t Number of evaporation events:\t" + ACO.eevents);
+        System.out.println("\t Best Hamiltonian cycle:\t" + ACO.bestPath + ":" + ACO.bestPathWeight);
         System.out.println();
-        Simulator.pec.addEvPEC(new PrintObservation(num + 1, (Simulator.simulationTime/20)*(num + 1)));
     }
 }

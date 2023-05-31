@@ -11,10 +11,10 @@ public class Ant {
     {
         this.id = id;
         //adding to J set id of nodes ajacent to n1
-        for (int i = 0; i < Simulator.G.getNumberOfAdjacenciesOf(Simulator.n1); i++) {
-            J.add(Simulator.G.getAdjacenciesOf(Simulator.n1).get(i).id);
+        for (int i = 0; i < ACO.G.getNumberOfAdjacenciesOf(ACO.n1); i++) {
+            J.add(ACO.G.getAdjacenciesOf(ACO.n1).get(i).id);
         }
-        this.path.add(Simulator.n1);
+        this.path.add(ACO.n1);
     }
 
     public List<Integer> getJ(){
@@ -29,16 +29,16 @@ public class Ant {
         //reset J
         J.removeAll(J);
         //add id of nodes adjacent to last node in path
-        for (int i = 0; i < Simulator.G.getNumberOfAdjacenciesOf(path.get(path.size()-1)); i++) {
+        for (int i = 0; i < ACO.G.getNumberOfAdjacenciesOf(path.get(path.size()-1)); i++) {
             //only add nodes that are not in path
-            if(!this.path.contains(Simulator.G.getAdjacenciesOf(path.get(path.size()-1)).get(i).id))
+            if(!this.path.contains(ACO.G.getAdjacenciesOf(path.get(path.size()-1)).get(i).id))
             {
-                J.add(Simulator.G.getAdjacenciesOf(path.get(path.size()-1)).get(i).id);
+                J.add(ACO.G.getAdjacenciesOf(path.get(path.size()-1)).get(i).id);
             }
             //if there is a chance of completing Hamiltonian cycle, then add n1 to possible targets if n1 is adjacent to last node in path
-            if (Simulator.G.getAdjacenciesOf(path.get(path.size()-1)).get(i).id == Simulator.n1 && this.path.size() == Simulator.G.V) 
+            if (ACO.G.getAdjacenciesOf(path.get(path.size()-1)).get(i).id == ACO.n1 && this.path.size() == ACO.G.getV()) 
             {
-                J.add(Simulator.n1);
+                J.add(ACO.n1);
             }
         }
     }
