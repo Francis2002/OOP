@@ -19,6 +19,8 @@ public class Simulator {
 
         algorithm.readInputs(args);
 
+        ACO.setGraph(new ArrayListGraph(ACO.n));
+
         algorithm.init(pec);
 
         algorithm.printParameters();

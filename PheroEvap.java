@@ -21,15 +21,15 @@ public class PheroEvap extends Event {
         //decrement pheromone level of adjacency s->d and d->s
 
         //if pheromone level becomes negative, set to zero
-        ACO.G.setPheroOfEdge(s, d, ACO.G.getPheroOfEdge(s, d) - ACO.ro);
-        if (ACO.G.getPheroOfEdge(s, d) < 0) {
-            ACO.G.setPheroOfEdge(s, d, 0);
+        ACO.setPheroOfEdge(s, d, ACO.getPheroOfEdge(s, d) - ACO.ro);
+        if (ACO.getPheroOfEdge(s, d) < 0) {
+            ACO.setPheroOfEdge(s, d, 0);
         }
 
         //find adjacency node with id==s in ACO.G.getAdjList(d) 
-        ACO.G.setPheroOfEdge(d, s, ACO.G.getPheroOfEdge(d, s) - ACO.ro);
-        if (ACO.G.getPheroOfEdge(d, s) < 0) {
-            ACO.G.setPheroOfEdge(d, s, 0);
+        ACO.setPheroOfEdge(d, s, ACO.getPheroOfEdge(d, s) - ACO.ro);
+        if (ACO.getPheroOfEdge(d, s) < 0) {
+            ACO.setPheroOfEdge(d, s, 0);
         }
         else 
         {

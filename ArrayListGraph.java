@@ -3,22 +3,22 @@ package prelim;
 import java.util.*;
 public class ArrayListGraph extends Graph{
 
-    ArrayList<ArrayList<Node>> adj;
+    ArrayList<ArrayList<Edge>> adj;
 
     public ArrayListGraph(int v){
         // Create the ArrayListGraph
         this.V = v;
-        this.adj = new ArrayList<ArrayList<Node>>(v);
+        this.adj = new ArrayList<ArrayList<Edge>>(v);
 
         //head of list of adjacencies of a node with id i will be on index i of G.adj
         for (int i = 0; i < V; i++)
-            adj.add(new ArrayList<Node>());
+            adj.add(new ArrayList<Edge>());
     }
 
         // Add edge(source, destination, weight, pheromone level)
     public void addEdge(int s, int d, int w) {
-        adj.get(s).add(new Node(d, w));
-        adj.get(d).add(new Node(s, w));
+        adj.get(s).add(new Edge(d, w));
+        adj.get(d).add(new Edge(s, w));
     }
 
     // Print the Graph
@@ -63,7 +63,7 @@ public class ArrayListGraph extends Graph{
         return adj.get(nodeIndex).size();
     }
 
-    public List<Node> getAdjacenciesOf(int index){
+    public List<Edge> getAdjacenciesOf(int index){
         return adj.get(index);
     }
 
@@ -87,7 +87,7 @@ public class ArrayListGraph extends Graph{
     }
 
     public int getWeightOfEdge(int s, int d){
-        Node currentAdjNode = getAdjacenciesOf(s).get(0); //default as first
+        Edge currentAdjNode = getAdjacenciesOf(s).get(0); //default as first
 
         //find adjacency node with id==J.get(i) in G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
         for (int j = 0; j < getNumberOfAdjacenciesOf(s); j++) {
@@ -97,32 +97,5 @@ public class ArrayListGraph extends Graph{
             }
         }
         return currentAdjNode.weight;
-    }
-
-    public double getPheroOfEdge(int s, int d){
-        Node currentAdjNode = getAdjacenciesOf(s).get(0); //default as first
-
-        //find adjacency node with id==J.get(i) in G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
-        for (int j = 0; j < getNumberOfAdjacenciesOf(s); j++) {
-            if (getAdjacenciesOf(s).get(j).id == d) {
-                currentAdjNode = getAdjacenciesOf(s).get(j);
-                break;
-            }
-        }
-        return currentAdjNode.phero;
-    }
-
-    public void setPheroOfEdge(int s, int d, double level){
-        Node currentAdjNode = getAdjacenciesOf(s).get(0); //default as first
-
-        //find adjacency node with id==J.get(i) in G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
-        for (int j = 0; j < getNumberOfAdjacenciesOf(s); j++) {
-            if (getAdjacenciesOf(s).get(j).id == d) {
-                currentAdjNode = getAdjacenciesOf(s).get(j);
-                break;
-            }
-        }
-        
-        currentAdjNode.setPhero(level);
     }
 }

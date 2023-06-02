@@ -7,6 +7,8 @@ public class ACO extends Algorithm {
 
     public static Graph G;
 
+    private static Map<Edge, Double> phero;
+
     public static int mevents;
     public static int eevents;
     
@@ -36,6 +38,7 @@ public class ACO extends Algorithm {
 
     public ACO(){
         ants = new ArrayList<Ant>();
+        phero = new HashMap<Edge, Double>();
     }
 
     public static Ant getAnt(int index){
@@ -44,12 +47,19 @@ public class ACO extends Algorithm {
 
     @Override
     public void init(PEC pec){
+
         //initialize graph
-        G = new ArrayListGraph(n);
 
         G.fillWithRandomAdjacencies(a);
 
         G.validateWeights();
+
+        for (int i = 0; i < G.getV(); i++) {
+            for (int j = 0; j < G.getNumberOfAdjacenciesOf(i); j++) {
+                System.out.println(G.getAdjacenciesOf(i).get(j) + "i: " + i + "j: " + j);
+                phero.put(G.getAdjacenciesOf(i).get(j), 0.0);
+            }
+        }
 
         //add ants and AntMove events starting on node n1
         for (int i = 0; i < niu; i++) {
@@ -125,5 +135,36 @@ public class ACO extends Algorithm {
     @Override
     public double getSimulationTime(){
         return simulationTime;
+    }
+
+    public static void setGraph(Graph graph){
+        G = graph;
+    }
+
+    public static double getPheroOfEdge(int s, int d){
+        Edge currentAdjNode = G.getAdjacenciesOf(s).get(0); //default as first
+
+        //find adjacency node with id==J.get(i) in G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
+        for (int j = 0; j < G.getNumberOfAdjacenciesOf(s); j++) {
+            if (G.getAdjacenciesOf(s).get(j).id == d) {
+                currentAdjNode = G.getAdjacenciesOf(s).get(j);
+                break;
+            }
+        }
+        return phero.get(currentAdjNode);
+    }
+
+    public static void setPheroOfEdge(int s, int d, double level){
+        Edge currentAdjNode = G.getAdjacenciesOf(s).get(0); //default as first
+
+        //find adjacency node with id==J.get(i) in G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
+        for (int j = 0; j < G.getNumberOfAdjacenciesOf(s); j++) {
+            if (G.getAdjacenciesOf(s).get(j).id == d) {
+                currentAdjNode = G.getAdjacenciesOf(s).get(j);
+                break;
+            }
+        }
+        
+        phero.put(currentAdjNode, level);
     }
 }

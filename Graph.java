@@ -13,15 +13,11 @@ public abstract class Graph {
 
     public abstract int getNumberOfAdjacenciesOf(int nodeIndex);
 
-    public abstract List<Node> getAdjacenciesOf(int index);
+    public abstract List<Edge> getAdjacenciesOf(int index);
 
     public abstract void fillWithRandomAdjacencies(int maxWeight);
 
     public abstract int getWeightOfEdge(int s, int d);
-
-    public abstract double getPheroOfEdge(int s, int d);
-
-    public abstract void setPheroOfEdge(int s, int d, double level);
 
     public boolean checksDiracsTheorem()
     {

@@ -29,17 +29,21 @@ public class Ant {
         //reset J
         J.removeAll(J);
         //add id of nodes adjacent to last node in path
-        for (int i = 0; i < ACO.G.getNumberOfAdjacenciesOf(path.get(path.size()-1)); i++) {
+        for (int i = 0; i < ACO.G.getNumberOfAdjacenciesOf(getLastInPath()); i++) {
             //only add nodes that are not in path
-            if(!this.path.contains(ACO.G.getAdjacenciesOf(path.get(path.size()-1)).get(i).id))
+            if(!this.path.contains(ACO.G.getAdjacenciesOf(getLastInPath()).get(i).id))
             {
-                J.add(ACO.G.getAdjacenciesOf(path.get(path.size()-1)).get(i).id);
+                J.add(ACO.G.getAdjacenciesOf(getLastInPath()).get(i).id);
             }
             //if there is a chance of completing Hamiltonian cycle, then add n1 to possible targets if n1 is adjacent to last node in path
-            if (ACO.G.getAdjacenciesOf(path.get(path.size()-1)).get(i).id == ACO.n1 && this.path.size() == ACO.G.getV()) 
+            if (ACO.G.getAdjacenciesOf(getLastInPath()).get(i).id == ACO.n1 && this.path.size() == ACO.G.getV()) 
             {
                 J.add(ACO.n1);
             }
         }
+    }
+
+    public int getLastInPath(){
+        return path.get(path.size()-1);
     }
 }

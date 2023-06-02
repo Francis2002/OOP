@@ -14,8 +14,8 @@ public class AntMove extends Event{
         double ci = 0;
         
         for (int i = 0; i < J.size(); i++) {
-            System.out.println("currentAdjNode.phero:" + ACO.G.getPheroOfEdge(ant.getPath().get(ant.getPath().size()-1), J.get(i)) + "; currentAdjNode.weight:" + ACO.G.getWeightOfEdge(ant.getPath().get(ant.getPath().size()-1), J.get(i)));
-            double cijk = (ACO.alfa + ACO.G.getPheroOfEdge(ant.getPath().get(ant.getPath().size()-1), J.get(i)))/(ACO.beta + ACO.G.getWeightOfEdge(ant.getPath().get(ant.getPath().size()-1), J.get(i)));
+            System.out.println("currentAdjNode.phero:" + ACO.getPheroOfEdge(ant.getLastInPath(), J.get(i)) + "; currentAdjNode.weight:" + ACO.G.getWeightOfEdge(ant.getLastInPath(), J.get(i)));
+            double cijk = (ACO.alfa + ACO.getPheroOfEdge(ant.getLastInPath(), J.get(i)))/(ACO.beta + ACO.G.getWeightOfEdge(ant.getLastInPath(), J.get(i)));
             probs.add(cijk);
             ci += cijk;
         }
@@ -67,9 +67,9 @@ public class AntMove extends Event{
             Random rand = new Random();
 
             // Obtain a number between [0 - ACO.G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)).size()-1].
-            int targetIndex = rand.nextInt(ACO.G.getNumberOfAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)));
+            int targetIndex = rand.nextInt(ACO.G.getNumberOfAdjacenciesOf(ant.getLastInPath()));
 
-            this.target = ACO.G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)).get(targetIndex).id;
+            this.target = ACO.G.getAdjacenciesOf(ant.getLastInPath()).get(targetIndex).id;
 
             this.completedCycle = true;
         }
@@ -86,7 +86,7 @@ public class AntMove extends Event{
             this.completedCycle = true;     
         }
 
-        this.timeStamp = currentTime + ACO.expRandom(ACO.delta*ACO.G.getWeightOfEdge(ant.getPath().get(ant.getPath().size()-1), this.target));
+        this.timeStamp = currentTime + ACO.expRandom(ACO.delta*ACO.G.getWeightOfEdge(ant.getLastInPath(), this.target));
         System.out.println("Event timeStamp:" + this.timeStamp);
         System.out.println("Ended event creation");
         System.out.println();
@@ -142,11 +142,11 @@ public class AntMove extends Event{
                             {
                                 //find adjacency node with id==ant.getPath().get(j) in ACO.G.getAdjacenciesOf(currentNodeId) 
 
-                                ACO.G.setPheroOfEdge(currentNodeId, ant.getPath().get(j), ACO.gama/totalWeight);
+                                ACO.setPheroOfEdge(currentNodeId, ant.getPath().get(j), ACO.gama/totalWeight);
 
                                 //find adjacency node with indexes switched, that is, node with id==currentNodeId in ACO.G.getAdjacenciesOf(currentAdjNode.id)
                                 
-                                ACO.G.setPheroOfEdge(ant.getPath().get(j), currentNodeId, ACO.gama/totalWeight);
+                                ACO.setPheroOfEdge(ant.getPath().get(j), currentNodeId, ACO.gama/totalWeight);
                                 
                                 pec.addEvPEC(new PheroEvap(currentNodeId, ant.getPath().get(j), currentTime));
                                 currentNodeId = ant.getPath().get(j);
@@ -159,7 +159,7 @@ public class AntMove extends Event{
                     int antPathSizeBeforeRemove = ant.getPath().size();
                     for (int j = i; j < antPathSizeBeforeRemove; j++) 
                     {
-                        System.out.println("removed:" + ant.getPath().get(ant.getPath().size()-1));
+                        System.out.println("removed:" + ant.getLastInPath());
                         ant.getPath().remove(ant.getPath().size()-1);                 //we are removing from end of cycle ant.getPath().size()-i times
                     }
                     System.out.println("removed cycle - new path:" + ant.getPath());
