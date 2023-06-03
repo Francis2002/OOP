@@ -1,9 +1,9 @@
-package prelim;
+package prelim.Graphs;
 
 import java.util.*;
 public class ArrayListGraph extends Graph{
 
-    ArrayList<ArrayList<Edge>> adj;
+    private ArrayList<ArrayList<Edge>> adj;
 
     public ArrayListGraph(int v){
         // Create the ArrayListGraph
@@ -29,9 +29,9 @@ public class ArrayListGraph extends Graph{
             int k = 0;
             for (int j = 0; j < V; j++) {
                 if(k < adj.get(i).size()){
-                    if(adj.get(i).get(k).id == j)
+                    if(adj.get(i).get(k).getId() == j)
                     {
-                        System.out.print(adj.get(i).get(k).weight + " ");
+                        System.out.print(adj.get(i).get(k).getWeight() + " ");
                         k++;
                     }
                     else
@@ -51,7 +51,7 @@ public class ArrayListGraph extends Graph{
     public void validateWeights(){
         for (int i = 0; i < adj.size(); i++) {
             for (int j = 0; j < adj.get(i).size(); j++) {
-                if (adj.get(i).get(j).weight <= 0) {
+                if (adj.get(i).get(j).getWeight() <= 0) {
                     System.out.println("Invalid inputs: All weights should be non-zero positive integers");
                     return;
                 }
@@ -91,11 +91,11 @@ public class ArrayListGraph extends Graph{
 
         //find adjacency node with id==J.get(i) in G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
         for (int j = 0; j < getNumberOfAdjacenciesOf(s); j++) {
-            if (getAdjacenciesOf(s).get(j).id == d) {
+            if (getAdjacenciesOf(s).get(j).getId() == d) {
                 currentAdjNode = getAdjacenciesOf(s).get(j);
                 break;
             }
         }
-        return currentAdjNode.weight;
+        return currentAdjNode.getWeight();
     }
 }

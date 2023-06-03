@@ -1,14 +1,17 @@
 package prelim;
 
+import prelim.Simulation.*;
+import prelim.Graphs.*;
+import prelim.AntColony.*;
 
 public class Simulator {
 
-    public static double currentTime;
-    public static Event currentEvent;
+    private static double currentTime;
+    private static Event currentEvent;
 
-    public static PEC pec;
+    private static PEC pec;
 
-    public static Algorithm algorithm;
+    private static Algorithm algorithm;
 
 
     public static void main(String[] args) throws Exception {
@@ -27,7 +30,7 @@ public class Simulator {
 
         //find event with lowest timeStamp (calculated inside pec.nextEvPEC method)
         currentEvent = pec.nextEvPEC();
-        currentTime = currentEvent.timeStamp;
+        currentTime = currentEvent.getTimeStamp();
         System.out.println("start:" + currentTime);
 
         //simulation cycle
@@ -35,7 +38,7 @@ public class Simulator {
         {
             currentEvent.simulateEvent(currentTime);
             currentEvent = pec.nextEvPEC();
-            currentTime = currentEvent.timeStamp;
+            currentTime = currentEvent.getTimeStamp();
         }
     }
     

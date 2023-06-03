@@ -1,8 +1,8 @@
-package prelim;
+package prelim.Simulation;
 
 public abstract class Algorithm {
 
-    public static double simulationTime;
+    protected static double simulationTime;
 
     public abstract void init(PEC pec);
 

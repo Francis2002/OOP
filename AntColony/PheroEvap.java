@@ -1,8 +1,9 @@
-package prelim;
+package prelim.AntColony;
 
+import prelim.Simulation.*;
 public class PheroEvap extends Event {
-    int s;
-    int d;
+    private int s;
+    private int d;
 
     public PheroEvap(int s, int d, double currentTime){
         System.out.println("Adding PheroEvap event:");
@@ -17,7 +18,7 @@ public class PheroEvap extends Event {
     public void simulateEvent(double currentTime){
         System.out.println("Started PheroEvap event simulation:");
 
-        ACO.eevents += 1;
+        ACO.incrementEevents();
         //decrement pheromone level of adjacency s->d and d->s
 
         //if pheromone level becomes negative, set to zero

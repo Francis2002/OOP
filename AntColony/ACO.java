@@ -1,19 +1,24 @@
-package prelim;
+package prelim.AntColony;
+
+import prelim.Simulation.*;
+import prelim.Graphs.*;
 
 import java.util.*;
 public class ACO extends Algorithm {
 
-    public static List<Ant> ants;
+    private static List<Ant> ants;
 
-    public static Graph G;
+    static Graph G;
 
     private static Map<Edge, Double> phero;
 
-    public static int mevents;
-    public static int eevents;
+    private static int mevents;
+    private static int eevents;
     
-    public static List<Integer> bestPath = new ArrayList<Integer>();
-    public static int bestPathWeight = 1000000;         //default as infinity
+    static List<Integer> bestPath = new ArrayList<Integer>();
+    static ArrayList<ArrayList<Integer>> hamiltons = new ArrayList<ArrayList<Integer>>();
+    static ArrayList<Integer> hamiltonCosts = new ArrayList<Integer>();
+    static int bestPathWeight = 1000000;         //default as infinity
 
     public static int n;
     public static int a;
@@ -26,7 +31,7 @@ public class ACO extends Algorithm {
     public static int niu;
 
     //define nest
-    protected static int n1;
+    static int n1;
 
     static Random random = new Random();
 
@@ -64,7 +69,7 @@ public class ACO extends Algorithm {
         //add ants and AntMove events starting on node n1
         for (int i = 0; i < niu; i++) {
             ants.add(new Ant(i));
-            pec.addEvPEC(new AntMove(i, 0));
+            pec.addEvPEC(new AntMove(i, 0, pec));
         }
         for (int i = 0; i < 20; i++) {
             pec.addEvPEC(new PrintObservation(i + 1, (simulationTime/20)*(i + 1)));
@@ -74,7 +79,7 @@ public class ACO extends Algorithm {
     @Override
     public void printParameters(){
         System.out.println("Input parameters:");
-        System.out.println("\t" + G.V + "\t: number of nodes in the graph");
+        System.out.println("\t" + G.getV() + "\t: number of nodes in the graph");
         System.out.println("\t" + n1 + "\t: the nest node");
         System.out.println("\t" + alfa + "\t: alpha, ant move event");
         System.out.println("\t" + beta + "\t: beta, ant move event");
@@ -146,7 +151,7 @@ public class ACO extends Algorithm {
 
         //find adjacency node with id==J.get(i) in G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
         for (int j = 0; j < G.getNumberOfAdjacenciesOf(s); j++) {
-            if (G.getAdjacenciesOf(s).get(j).id == d) {
+            if (G.getAdjacenciesOf(s).get(j).getId() == d) {
                 currentAdjNode = G.getAdjacenciesOf(s).get(j);
                 break;
             }
@@ -159,12 +164,115 @@ public class ACO extends Algorithm {
 
         //find adjacency node with id==J.get(i) in G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
         for (int j = 0; j < G.getNumberOfAdjacenciesOf(s); j++) {
-            if (G.getAdjacenciesOf(s).get(j).id == d) {
+            if (G.getAdjacenciesOf(s).get(j).getId() == d) {
                 currentAdjNode = G.getAdjacenciesOf(s).get(j);
                 break;
             }
         }
         
         phero.put(currentAdjNode, level);
+    }
+
+    public static void incrementMevents(){
+        mevents+=1;
+    }
+
+    public static void incrementEevents(){
+        eevents+=1;
+    }
+
+    public static int getMevents(){
+        return mevents;
+    }
+
+    public static int getEevents(){
+        return eevents;
+    }
+
+    public static void updateBestPath(List<Integer> path){
+        bestPath.removeAll(bestPath);
+        bestPath.addAll(path);
+    }
+
+    public static void addHamilton(ArrayList<Integer> path, int cost){
+        System.out.println("Received Path:" + path);
+        if(!duplicateHamilton(path)){
+            System.out.println("Adding new hamilton");
+            //needs to be done like this - if added directly, the reference is copied and not the content, meaning that a change to the ant path woukd change the hamiltons list
+            ArrayList<Integer> toAdd = new ArrayList<Integer>();
+            toAdd.addAll(path);
+            System.out.println("hamiltonsCosts: " + hamiltonCosts.size());
+            int index = binarySearch(hamiltonCosts, 0, hamiltonCosts.size() - 1, cost);
+            System.out.println("index: " + index);
+            if (index > 4) {
+                return;
+            }
+            hamiltons.add(index, toAdd);
+            hamiltonCosts.add(index, cost);
+            if (hamiltons.size() > 5) {
+                hamiltons.subList(5, hamiltons.size() - 1).clear();
+                hamiltonCosts.subList(5, hamiltonCosts.size() - 1).clear();
+            }
+            System.out.println("New hamilton list: " + hamiltons);
+        }
+    }
+
+    public static void updateBestPathWeight(int newWeight){
+        bestPathWeight = newWeight;
+    }
+
+    public static int getBestPathWeight(){
+        return bestPathWeight;
+    }
+
+    private static boolean duplicateHamilton(ArrayList<Integer> path){
+        System.out.println("Path: " + path);
+        System.out.println("Hamiltons: " + hamiltons);
+        int flag = 0;
+        //iterate over all hamiltons
+        for (int i = 0; i < hamiltons.size(); i++) {
+            System.out.println("Current Hamilton: " + hamiltons.get(i));
+            flag = 0;
+            //check if all elements match
+            for (int j = 0; j < hamiltons.get(i).size(); j++) {
+                if(!hamiltons.get(i).get(j).equals(path.get(j))){
+                    //indicate that elements do not match
+                    flag = 1;
+                    break;
+                }
+            }
+            //inner loop was not broken => path is duplicate
+            if(flag == 0){
+                return true;
+            }
+        }
+        //inner loop never broken for all hamiltons => path not yet in list => not duplicate
+        return false;
+    }
+
+    private static int binarySearch(List<Integer> arr, int l, int r, int x)
+    {
+        if (r>=l)
+        {
+            int mid = l + (r - l)/2;
+  
+            // If the element is present at the
+            // middle itself
+            if (arr.get(mid).equals(x))
+               return mid;
+  
+            // If element is smaller than mid, then
+            // it can only be present in left subarray
+            if (arr.get(mid).intValue() > x)
+               return binarySearch(arr, l, mid-1, x);
+  
+            // Else the element can only be present
+            // in right subarray
+            return binarySearch(arr, mid+1, r, x);
+        }
+  
+        // We reach here when final index is discovered
+        // return left value, becuase right has already crossed left
+        return l;
     }
 }

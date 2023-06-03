@@ -1,10 +1,11 @@
-package prelim;
+package prelim.AntColony;
 
 import java.util.*;
+import prelim.Simulation.*;
 public class AntMove extends Event{
-    int target;
-    boolean completedHamilton = false;
-    boolean completedCycle = false;
+    private int target;
+    private boolean completedHamilton = false;
+    private boolean completedCycle = false;
 
     Ant ant;
 
@@ -32,11 +33,13 @@ public class AntMove extends Event{
         return false;
     }
 
-    public AntMove(int id, double currentTime){
+    public AntMove(int id, double currentTime, PEC pec){
         System.out.println("Starting event AntMove creation:");
 
         //find ant with id in ACO.ants (ants are ordered by id, so the .get method is enough)
         this.ant = ACO.getAnt(id);
+
+        this.pec = pec;
         //J set not empty
         if(this.ant.getJ().size() != 0)
         {
@@ -69,7 +72,7 @@ public class AntMove extends Event{
             // Obtain a number between [0 - ACO.G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)).size()-1].
             int targetIndex = rand.nextInt(ACO.G.getNumberOfAdjacenciesOf(ant.getLastInPath()));
 
-            this.target = ACO.G.getAdjacenciesOf(ant.getLastInPath()).get(targetIndex).id;
+            this.target = ACO.G.getAdjacenciesOf(ant.getLastInPath()).get(targetIndex).getId();
 
             this.completedCycle = true;
         }
@@ -97,10 +100,11 @@ public class AntMove extends Event{
         System.out.println("Started event simulation:");
         System.out.println("J set was:" + ant.getJ());
 
-        ACO.mevents += 1;
+        ACO.incrementMevents();
 
         if(completedCycle){
             completedCycle = false;
+            //find beginning of cycle
             for (int i = 0; i < ant.getPath().size(); i++) 
             {
                 //find beginning of cycle
@@ -122,17 +126,17 @@ public class AntMove extends Event{
                                 totalWeight += ACO.G.getWeightOfEdge(currentNodeId, ant.getPath().get(j));
                                 currentNodeId =  ant.getPath().get(j);
                             }
-                            //do not forget to add last weght, from last node in path to n1 = target
+                            //do not forget to add last weight, from last node in path to n1 = target
 
                             //find adjacency node with id==target in ACO.G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
-                            totalWeight += ACO.G.getWeightOfEdge(currentNodeId, this.target);;
+                            totalWeight += ACO.G.getWeightOfEdge(currentNodeId, this.target);
 
-                            if(totalWeight < ACO.bestPathWeight)
+                            ACO.addHamilton(ant.getPath(), totalWeight);
+
+                            if(totalWeight < ACO.getBestPathWeight())
                             {
-                                ACO.bestPathWeight = totalWeight;
-                                ACO.bestPath.removeAll(ACO.bestPath);
-                                ACO.bestPath.addAll(ant.getPath());
-                                ACO.bestPath.add(target);
+                                ACO.updateBestPathWeight(totalWeight);
+                                ACO.updateBestPath(ant.getPath());
                             }
 
                             //now we must deploy pheromones, that is, increment pheromone level of adjacency nodes and add PheroEvap events
@@ -175,6 +179,6 @@ public class AntMove extends Event{
         System.out.println();
 
         System.out.println("Adding AntMove event:");
-        pec.addEvPEC(new AntMove(ant.id, currentTime));
+        pec.addEvPEC(new AntMove(ant.id, currentTime, pec));
     }
 }

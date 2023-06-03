@@ -1,8 +1,8 @@
-package prelim;
+package prelim.Graphs;
 
 public class Edge {
-    int id;
-    int weight;
+    private int id;
+    private int weight;
 
     public Edge(int id, int weight)
     {

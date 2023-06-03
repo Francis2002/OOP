@@ -1,4 +1,4 @@
-package prelim;
+package prelim.Graphs;
 
 import java.util.*;
 public abstract class Graph {
