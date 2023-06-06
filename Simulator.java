@@ -13,7 +13,6 @@ public class Simulator {
 
     private static Algorithm algorithm;
 
-
     public static void main(String[] args) throws Exception {
 
         pec = new PEC();
@@ -22,8 +21,11 @@ public class Simulator {
 
         algorithm.readInputs(args);
 
+        //set graph strategy. Not all algorithms have graphs, so the method setGraph is not in the algorithm interface and thus we must access it in a static way.
+        //since ACO is a Singleton, there are no problems doing this
         ACO.setGraph(new ArrayListGraph(ACO.n));
 
+        //put initial events in the pec and initialize variables
         algorithm.init(pec);
 
         algorithm.printParameters();
@@ -36,7 +38,7 @@ public class Simulator {
         //simulation cycle
         while(currentTime <= algorithm.getSimulationTime())
         {
-            currentEvent.simulateEvent(currentTime);
+            currentEvent.simulateEvent();
             currentEvent = pec.nextEvPEC();
             currentTime = currentEvent.getTimeStamp();
         }

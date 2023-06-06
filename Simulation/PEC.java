@@ -4,7 +4,7 @@ import java.util.*;
 
 public class PEC {
 
-    private static List<Event> evArr = new ArrayList<Event>();
+    private List<Event> evArr = new ArrayList<Event>();
 
     public void addEvPEC(Event ev){
         //find correct place of new event on the already ordered evArr using binarySearch
@@ -16,7 +16,7 @@ public class PEC {
         return evArr.remove(0);
     }
 
-    int binarySearch(List<Event> arr, int l, int r, Event x)
+    private int binarySearch(List<Event> arr, int l, int r, Event x)
     {
         if (r>=l)
         {

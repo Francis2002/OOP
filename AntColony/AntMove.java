@@ -96,7 +96,7 @@ public class AntMove extends Event{
     }
 
     @Override
-    public void simulateEvent(double currentTime){
+    public void simulateEvent(){
         System.out.println("Started event simulation:");
         System.out.println("J set was:" + ant.getJ());
 
@@ -152,7 +152,7 @@ public class AntMove extends Event{
                                 
                                 ACO.setPheroOfEdge(ant.getPath().get(j), currentNodeId, ACO.gama/totalWeight);
                                 
-                                pec.addEvPEC(new PheroEvap(currentNodeId, ant.getPath().get(j), currentTime));
+                                pec.addEvPEC(new PheroEvap(currentNodeId, ant.getPath().get(j), timeStamp));
                                 currentNodeId = ant.getPath().get(j);
                             }
                         }
@@ -179,6 +179,6 @@ public class AntMove extends Event{
         System.out.println();
 
         System.out.println("Adding AntMove event:");
-        pec.addEvPEC(new AntMove(ant.id, currentTime, pec));
+        pec.addEvPEC(new AntMove(ant.id, timeStamp, pec));
     }
 }

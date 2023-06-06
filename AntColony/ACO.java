@@ -4,7 +4,9 @@ import prelim.Simulation.*;
 import prelim.Graphs.*;
 
 import java.util.*;
-public class ACO extends Algorithm {
+public class ACO implements Algorithm {
+
+    private static double simulationTime;
 
     private static List<Ant> ants;
 

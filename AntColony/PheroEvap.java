@@ -15,7 +15,7 @@ public class PheroEvap extends Event {
     }
 
     @Override
-    public void simulateEvent(double currentTime){
+    public void simulateEvent(){
         System.out.println("Started PheroEvap event simulation:");
 
         ACO.incrementEevents();
@@ -34,7 +34,7 @@ public class PheroEvap extends Event {
         }
         else 
         {
-            pec.addEvPEC(new PheroEvap(s, d, currentTime));          //only add one event beacuse adjacencies work in pairs, one event changes 2 adjacency nodes
+            pec.addEvPEC(new PheroEvap(s, d, timeStamp));          //only add one event beacuse adjacencies work in pairs, one event changes 2 adjacency nodes
         }
 
         System.out.println("Ended event simulation");

@@ -6,7 +6,7 @@ public abstract class Event {
 
     protected double timeStamp;
 
-    public abstract void simulateEvent(double currentTime);
+    public abstract void simulateEvent();
 
     public double getTimeStamp() {
         return timeStamp;

@@ -10,9 +10,9 @@ public class PrintObservation extends Event{
     }
 
     @Override
-    public void simulateEvent(double currentTime){
+    public void simulateEvent(){
         System.out.println("Observation " + num + ":");
-        System.out.println("\t Present instant:\t\t" + currentTime);
+        System.out.println("\t Present instant:\t\t" + timeStamp);
         System.out.println("\t Number of move events:\t\t" + ACO.getMevents());
         System.out.println("\t Number of evaporation events:\t" + ACO.getEevents());
         System.out.println("\t Top candidate cycles:");
