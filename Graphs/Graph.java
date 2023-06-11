@@ -3,7 +3,7 @@ package prelim.Graphs;
 import java.util.*;
 public abstract class Graph {
 
-    int V;
+    protected int V;
 
     public abstract void addEdge(int s, int d, int w);
 
@@ -19,6 +19,8 @@ public abstract class Graph {
 
     public abstract int getWeightOfEdge(int s, int d);
 
+    public abstract int getSumOfAllWeights();
+
     public boolean checksDiracsTheorem()
     {
         for (int i = 0; i < V; i++) {
@@ -31,5 +33,9 @@ public abstract class Graph {
 
     public int getV(){
         return V;
+    }
+
+    public void setV(int v){
+        this.V = v;
     }
 }

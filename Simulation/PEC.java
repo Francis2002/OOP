@@ -24,12 +24,12 @@ public class PEC {
   
             // If the element is present at the
             // middle itself
-            if (arr.get(mid).timeStamp == x.timeStamp)
+            if (arr.get(mid).compareTo(x) == 0)
                return mid;
   
             // If element is smaller than mid, then
             // it can only be present in left subarray
-            if (arr.get(mid).timeStamp > x.timeStamp)
+            if (arr.get(mid).compareTo(x) > 0)
                return binarySearch(arr, l, mid-1, x);
   
             // Else the element can only be present

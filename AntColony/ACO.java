@@ -6,38 +6,27 @@ import prelim.Graphs.*;
 import java.util.*;
 public class ACO implements Algorithm {
 
-    private static double simulationTime;
+    private double simulationTime;
 
-    private static List<Ant> ants;
+    private List<Ant> ants;
 
-    static Graph G;
+    private static Graph G;
 
-    private static Map<Edge, Double> phero;
+    private Map<Edge, Double> phero;
 
-    private static int mevents;
-    private static int eevents;
+    private int mevents;
+    private int eevents;
     
-    static List<Integer> bestPath = new ArrayList<Integer>();
-    static ArrayList<ArrayList<Integer>> hamiltons = new ArrayList<ArrayList<Integer>>();
-    static ArrayList<Integer> hamiltonCosts = new ArrayList<Integer>();
-    static int bestPathWeight = 1000000;         //default as infinity
+    private List<Integer> bestPath = new ArrayList<Integer>();
+    private ArrayList<ArrayList<Integer>> hamiltons = new ArrayList<ArrayList<Integer>>();
+    private ArrayList<Integer> hamiltonCosts = new ArrayList<Integer>();
+    private int bestPathWeight = 1000000;         //default as infinity
 
-    public static int n;
-    public static int a;
-    public static double alfa;
-    public static double beta;
-    public static double gama;
-    public static double ro;
-    public static double miu;
-    public static double delta;
-    public static int niu;
+    private Map<String, Double> params;
 
-    //define nest
-    static int n1;
+    Random random = new Random();
 
-    static Random random = new Random();
-
-    public static double expRandom(double m)
+    public double expRandom(double m)
     {
         double next = random.nextDouble();
         return -m*Math.log(1.0 - next);
@@ -46,20 +35,15 @@ public class ACO implements Algorithm {
     public ACO(){
         ants = new ArrayList<Ant>();
         phero = new HashMap<Edge, Double>();
+        params = new HashMap<String, Double>();
     }
 
-    public static Ant getAnt(int index){
+    public Ant getAnt(int index){
         return ants.get(index);
     }
 
     @Override
     public void init(PEC pec){
-
-        //initialize graph
-
-        G.fillWithRandomAdjacencies(a);
-
-        G.validateWeights();
 
         for (int i = 0; i < G.getV(); i++) {
             for (int j = 0; j < G.getNumberOfAdjacenciesOf(i); j++) {
@@ -69,12 +53,12 @@ public class ACO implements Algorithm {
         }
 
         //add ants and AntMove events starting on node n1
-        for (int i = 0; i < niu; i++) {
-            ants.add(new Ant(i));
-            pec.addEvPEC(new AntMove(i, 0, pec));
+        for (int i = 0; i < getParam("niu"); i++) {
+            ants.add(new Ant(i, G, this));
+            pec.addEvPEC(new AntMove(ants.get(i), i, 0, pec));
         }
         for (int i = 0; i < 20; i++) {
-            pec.addEvPEC(new PrintObservation(i + 1, (simulationTime/20)*(i + 1)));
+            pec.addEvPEC(new PrintObservation(this, i + 1, (simulationTime/20)*(i + 1)));
         }
     }
 
@@ -82,14 +66,14 @@ public class ACO implements Algorithm {
     public void printParameters(){
         System.out.println("Input parameters:");
         System.out.println("\t" + G.getV() + "\t: number of nodes in the graph");
-        System.out.println("\t" + n1 + "\t: the nest node");
-        System.out.println("\t" + alfa + "\t: alpha, ant move event");
-        System.out.println("\t" + beta + "\t: beta, ant move event");
-        System.out.println("\t" + delta + "\t: delta, ant move event");
-        System.out.println("\t" + miu + "\t: eta, pheromone evaporation event");
-        System.out.println("\t" + ro + "\t: rho, pheromone evaporation event");
-        System.out.println("\t" + gama + "\t: pheromone level");
-        System.out.println("\t" + niu + "\t: ant colony size");
+        System.out.println("\t" + getParam("n1") + "\t: the nest node");
+        System.out.println("\t" + getParam("alfa") + "\t: alpha, ant move event");
+        System.out.println("\t" + getParam("beta") + "\t: beta, ant move event");
+        System.out.println("\t" + getParam("delta") + "\t: delta, ant move event");
+        System.out.println("\t" + getParam("miu") + "\t: eta, pheromone evaporation event");
+        System.out.println("\t" + getParam("ro") + "\t: rho, pheromone evaporation event");
+        System.out.println("\t" + getParam("gama") + "\t: pheromone level");
+        System.out.println("\t" + getParam("niu") + "\t: ant colony size");
         System.out.println("\t" + simulationTime + "\t: final instant");
         System.out.println();
         
@@ -121,22 +105,29 @@ public class ACO implements Algorithm {
                 System.out.println("Error: Invalid invocation -- all input parameters (except nest/n1) should be non-zero positive numbers, run with -h for help");
                 System.exit(1);
             }
-            n = Integer.parseInt(args[1]);
-            a = Integer.parseInt(args[2]);
-            n1 = Integer.parseInt(args[3]);
-            alfa = Double.parseDouble(args[4]);
-            beta = Double.parseDouble(args[5]);
-            delta = Double.parseDouble(args[6]);
-            miu = Double.parseDouble(args[7]);
-            ro = Double.parseDouble(args[8]);
-            gama = Double.parseDouble(args[9]);
-            niu = Integer.parseInt(args[10]);
+            params.put("invocation", 0.0);
+            params.put("n", Double.parseDouble(args[1]));
+            params.put("a", Double.parseDouble(args[2]));
+            params.put("n1", Double.parseDouble(args[3]));
+            params.put("alfa", Double.parseDouble(args[4]));
+            params.put("beta", Double.parseDouble(args[5]));
+            params.put("delta", Double.parseDouble(args[6]));
+            params.put("miu", Double.parseDouble(args[7]));
+            params.put("ro", Double.parseDouble(args[8]));
+            params.put("gama", Double.parseDouble(args[9]));
+            params.put("niu", Double.parseDouble(args[10]));
             simulationTime = Double.parseDouble(args[11]);
+
+            G.setV(Integer.parseInt(args[1]));
+
+            G.fillWithRandomAdjacencies(Integer.parseInt(args[2]));
         }
         else if(args[0].equals("-f")){
             System.out.println("TODO: Read from file");
             System.exit(1);
         }
+
+        G.validateWeights();
     }
 
     @Override
@@ -148,55 +139,60 @@ public class ACO implements Algorithm {
         G = graph;
     }
 
-    public static double getPheroOfEdge(int s, int d){
+    public double getPheroOfEdge(int s, int d){
         Edge currentAdjNode = G.getAdjacenciesOf(s).get(0); //default as first
 
-        //find adjacency node with id==J.get(i) in G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
-        for (int j = 0; j < G.getNumberOfAdjacenciesOf(s); j++) {
-            if (G.getAdjacenciesOf(s).get(j).getId() == d) {
-                currentAdjNode = G.getAdjacenciesOf(s).get(j);
+        for (Edge edge : G.getAdjacenciesOf(s)) {
+            if (edge.getId() == d) {
+                currentAdjNode = edge;
                 break;
             }
         }
         return phero.get(currentAdjNode);
     }
 
-    public static void setPheroOfEdge(int s, int d, double level){
+    public void setPheroOfEdge(int s, int d, double level){
         Edge currentAdjNode = G.getAdjacenciesOf(s).get(0); //default as first
 
-        //find adjacency node with id==J.get(i) in G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
+        for (Edge edge : G.getAdjacenciesOf(s)) {
+            if (edge.getId() == d) {
+                currentAdjNode = edge;
+                break;
+            }
+        }
+        /*//find adjacency node with id==J.get(i) in G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
         for (int j = 0; j < G.getNumberOfAdjacenciesOf(s); j++) {
             if (G.getAdjacenciesOf(s).get(j).getId() == d) {
                 currentAdjNode = G.getAdjacenciesOf(s).get(j);
                 break;
             }
-        }
+        }*/
         
         phero.put(currentAdjNode, level);
     }
 
-    public static void incrementMevents(){
+    public void incrementMevents(){
         mevents+=1;
     }
 
-    public static void incrementEevents(){
+    public void incrementEevents(){
         eevents+=1;
     }
 
-    public static int getMevents(){
+    public int getMevents(){
         return mevents;
     }
 
-    public static int getEevents(){
+    public int getEevents(){
         return eevents;
     }
 
-    public static void updateBestPath(List<Integer> path){
+    public void updateBestPath(List<Integer> path){
         bestPath.removeAll(bestPath);
         bestPath.addAll(path);
     }
 
-    public static void addHamilton(ArrayList<Integer> path, int cost){
+    public void addHamilton(ArrayList<Integer> path, int cost){
         System.out.println("Received Path:" + path);
         if(!duplicateHamilton(path)){
             System.out.println("Adding new hamilton");
@@ -219,15 +215,27 @@ public class ACO implements Algorithm {
         }
     }
 
-    public static void updateBestPathWeight(int newWeight){
+    public void updateBestPathWeight(int newWeight){
         bestPathWeight = newWeight;
     }
 
-    public static int getBestPathWeight(){
+    public int getBestPathWeight(){
         return bestPathWeight;
     }
 
-    private static boolean duplicateHamilton(ArrayList<Integer> path){
+    public ArrayList<ArrayList<Integer>> getHamiltons(){
+        return hamiltons;
+    }
+
+    public ArrayList<Integer> getHamiltonCosts(){
+        return hamiltonCosts;
+    }
+
+    public List<Integer> getBestPath(){
+        return bestPath;
+    }
+
+    private boolean duplicateHamilton(ArrayList<Integer> path){
         System.out.println("Path: " + path);
         System.out.println("Hamiltons: " + hamiltons);
         int flag = 0;
@@ -252,7 +260,11 @@ public class ACO implements Algorithm {
         return false;
     }
 
-    private static int binarySearch(List<Integer> arr, int l, int r, int x)
+    public double getParam(String param){
+        return params.get(param);
+    }
+
+    private int binarySearch(List<Integer> arr, int l, int r, int x)
     {
         if (r>=l)
         {

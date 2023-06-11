@@ -4,12 +4,15 @@ import prelim.Simulation.*;
 public class PheroEvap extends Event {
     private int s;
     private int d;
+    private ACO colony;
 
-    public PheroEvap(int s, int d, double currentTime){
+    public PheroEvap(int s, int d, double currentTime, ACO colony, PEC pec){
         System.out.println("Adding PheroEvap event:");
         this.s = s;
         this.d = d;
-        this.timeStamp = currentTime + ACO.expRandom(ACO.miu);
+        this.colony = colony;
+        this.timeStamp = currentTime + colony.expRandom(colony.getParam("miu"));
+        this.pec = pec;
         System.out.println("Ended event creation; Event timeStamp:" + this.timeStamp);
         System.out.println();
     }
@@ -18,23 +21,23 @@ public class PheroEvap extends Event {
     public void simulateEvent(){
         System.out.println("Started PheroEvap event simulation:");
 
-        ACO.incrementEevents();
+        colony.incrementEevents();
         //decrement pheromone level of adjacency s->d and d->s
 
         //if pheromone level becomes negative, set to zero
-        ACO.setPheroOfEdge(s, d, ACO.getPheroOfEdge(s, d) - ACO.ro);
-        if (ACO.getPheroOfEdge(s, d) < 0) {
-            ACO.setPheroOfEdge(s, d, 0);
+        colony.setPheroOfEdge(s, d, colony.getPheroOfEdge(s, d) - colony.getParam("ro"));
+        if (colony.getPheroOfEdge(s, d) < 0) {
+            colony.setPheroOfEdge(s, d, 0);
         }
 
         //find adjacency node with id==s in ACO.G.getAdjList(d) 
-        ACO.setPheroOfEdge(d, s, ACO.getPheroOfEdge(d, s) - ACO.ro);
-        if (ACO.getPheroOfEdge(d, s) < 0) {
-            ACO.setPheroOfEdge(d, s, 0);
+        colony.setPheroOfEdge(d, s, colony.getPheroOfEdge(d, s) - colony.getParam("ro"));
+        if (colony.getPheroOfEdge(d, s) < 0) {
+            colony.setPheroOfEdge(d, s, 0);
         }
         else 
         {
-            pec.addEvPEC(new PheroEvap(s, d, timeStamp));          //only add one event beacuse adjacencies work in pairs, one event changes 2 adjacency nodes
+            pec.addEvPEC(new PheroEvap(s, d, timeStamp, colony, pec));          //only add one event beacuse adjacencies work in pairs, one event changes 2 adjacency nodes
         }
 
         System.out.println("Ended event simulation");

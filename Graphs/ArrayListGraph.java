@@ -5,18 +5,22 @@ public class ArrayListGraph extends Graph{
 
     private ArrayList<ArrayList<Edge>> adj;
 
-    public ArrayListGraph(int v){
+    public ArrayListGraph(){
         // Create the ArrayListGraph
-        this.V = v;
-        this.adj = new ArrayList<ArrayList<Edge>>(v);
-
-        //head of list of adjacencies of a node with id i will be on index i of G.adj
-        for (int i = 0; i < V; i++)
-            adj.add(new ArrayList<Edge>());
+        this.adj = new ArrayList<ArrayList<Edge>>();
     }
 
         // Add edge(source, destination, weight, pheromone level)
     public void addEdge(int s, int d, int w) {
+        System.out.println("size: " + adj.size());
+        while (adj.size() - 1 < s) {
+            System.out.println("adding head in s");
+            adj.add(new ArrayList<Edge>());
+        }
+        while (adj.size() - 1 < d) {
+            System.out.println("adding head in d");
+            adj.add(new ArrayList<Edge>());
+        }
         adj.get(s).add(new Edge(d, w));
         adj.get(d).add(new Edge(s, w));
     }
@@ -48,6 +52,9 @@ public class ArrayListGraph extends Graph{
         System.out.println("\n");
     }
 
+    /**
+     * @param 
+     */
     public void validateWeights(){
         for (int i = 0; i < adj.size(); i++) {
             for (int j = 0; j < adj.get(i).size(); j++) {
@@ -70,6 +77,7 @@ public class ArrayListGraph extends Graph{
     public void fillWithRandomAdjacencies(int maxWeight){
         Random random = new Random();
         int weight = 0;
+        System.out.println("V: " + V);
         for (int i = 0; i < V; i++) {
             for (int j = i+1; j < V; j++) {
                 weight = random.nextInt(maxWeight + 1);
@@ -78,6 +86,8 @@ public class ArrayListGraph extends Graph{
                 }
             }
         }
+        System.out.println("printing graph");
+        printGraph();
         if(!checksDiracsTheorem()){
             for (int i = 0; i < V; i++) {
                 adj.get(i).removeAll(adj.get(i));
@@ -97,5 +107,16 @@ public class ArrayListGraph extends Graph{
             }
         }
         return currentAdjNode.getWeight();
+    }
+
+    @Override
+    public int getSumOfAllWeights(){
+        int cnt = 0;
+        for (int i = 0; i < V; i++) {
+            for (int j = i+1; j < V; j++) {
+                cnt += getWeightOfEdge(i, j);
+            }
+        }
+        return cnt;
     }
 }

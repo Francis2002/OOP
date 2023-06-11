@@ -19,11 +19,11 @@ public class Simulator {
 
         algorithm = new ACO();
 
-        algorithm.readInputs(args);
-
         //set graph strategy. Not all algorithms have graphs, so the method setGraph is not in the algorithm interface and thus we must access it in a static way.
         //since ACO is a Singleton, there are no problems doing this
-        ACO.setGraph(new ArrayListGraph(ACO.n));
+        ACO.setGraph(new ArrayListGraph());        
+
+        algorithm.readInputs(args);
 
         //put initial events in the pec and initialize variables
         algorithm.init(pec);

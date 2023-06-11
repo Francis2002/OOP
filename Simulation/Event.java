@@ -1,6 +1,6 @@
 package prelim.Simulation;
 
-public abstract class Event {
+public abstract class Event implements Comparable<Event>{
 
     protected PEC pec;
 
@@ -10,6 +10,17 @@ public abstract class Event {
 
     public double getTimeStamp() {
         return timeStamp;
+    }
+
+    @Override
+    public int compareTo(Event event){
+        if (this.getTimeStamp() < event.getTimeStamp()) {
+            return -1;
+        }
+        if (this.getTimeStamp() > event.getTimeStamp()) {
+            return 1;
+        }
+        return 0;
     }
     
 }
