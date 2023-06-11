@@ -1,5 +1,7 @@
 # OOP
 
+## Para o manifest funcionar, têm de por as 3 pastas dentro de uma pasta chamda "prelim". O manifest e o .jar fora do prelim
+
 ## Neste momento já está a strategy pattern implementada em relação aos grafos.
 
 ## TODO:
