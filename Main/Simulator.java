@@ -1,4 +1,4 @@
-package prelim;
+package prelim.Main;
 
 import prelim.Simulation.*;
 import prelim.Graphs.*;

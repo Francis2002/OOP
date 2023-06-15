@@ -51,7 +51,7 @@ public class AntMove extends Event{
             ant.handleCycleCompletion(target, pec, timeStamp);
         }
 
-        ant.getPath().add(target);
+        ant.addToPath(target);
         ant.updateJ();
         System.out.println("added:" + target + " to ant:" + ant.id + " with new J set:" + ant.J);
         System.out.println("Ended event simulation");

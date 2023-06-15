@@ -50,19 +50,6 @@ public class Ant {
                 J.add(nest);
             }
         }
-        /*//add id of nodes adjacent to last node in path
-        for (int i = 0; i < ACO.G.getNumberOfAdjacenciesOf(getLastInPath()); i++) {
-            //only add nodes that are not in path
-            if(!this.path.contains(ACO.G.getAdjacenciesOf(getLastInPath()).get(i).getId()))
-            {
-                J.add(ACO.G.getAdjacenciesOf(getLastInPath()).get(i).getId());
-            }
-            //if there is a chance of completing Hamiltonian cycle, then add n1 to possible targets if n1 is adjacent to last node in path
-            if (ACO.G.getAdjacenciesOf(getLastInPath()).get(i).getId() == ACO.n1 && this.path.size() == ACO.G.getV()) 
-            {
-                J.add(ACO.n1);
-            }
-        }*/
     }
 
     public int getLastInPath(){
@@ -228,5 +215,9 @@ public class Ant {
                 break;
             }
         }
+    }
+
+    public void addToPath(int id){
+        path.add(id);
     }
 }

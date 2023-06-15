@@ -25,7 +25,7 @@ public class ACO implements Algorithm {
     private List<Integer> bestPath = new ArrayList<Integer>();
     private ArrayList<ArrayList<Integer>> hamiltons = new ArrayList<ArrayList<Integer>>();
     private ArrayList<Integer> hamiltonCosts = new ArrayList<Integer>();
-    private int bestPathWeight = 1000000;         //default as infinity
+    private int bestPathWeight = 100000000;         //default as infinity
 
     private Map<String, Double> params;
 
@@ -242,13 +242,6 @@ public class ACO implements Algorithm {
                 break;
             }
         }
-        /*//find adjacency node with id==J.get(i) in G.getAdjacenciesOf(ant.getPath().get(ant.getPath().size()-1)) 
-        for (int j = 0; j < G.getNumberOfAdjacenciesOf(s); j++) {
-            if (G.getAdjacenciesOf(s).get(j).getId() == d) {
-                currentAdjNode = G.getAdjacenciesOf(s).get(j);
-                break;
-            }
-        }*/
         
         phero.put(currentAdjNode, level);
     }
