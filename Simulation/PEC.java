@@ -4,6 +4,19 @@ import java.util.*;
 
 public class PEC {
 
+    private static PEC instance;
+
+    private PEC(){
+
+    }
+
+    public static PEC getInstance(){
+        if (instance == null) {
+            instance = new PEC();
+        }
+        return instance;
+    }
+
     private List<Event> evArr = new ArrayList<Event>();
 
     public void addEvPEC(Event ev){

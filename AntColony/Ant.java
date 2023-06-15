@@ -177,7 +177,7 @@ public class Ant {
 
                         colony.addHamilton(getPath(), totalWeight);
 
-                        if(totalWeight < colony.getBestPathWeight())
+                        if(totalWeight <= colony.getBestPathWeight())
                         {
                             colony.updateBestPathWeight(totalWeight);
                             colony.updateBestPath(getPath());

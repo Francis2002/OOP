@@ -4,6 +4,11 @@ import prelim.Simulation.*;
 import prelim.Graphs.*;
 
 import java.util.*;
+import java.io.*;
+/**
+ * This class implements an Ant Colony Optimization algorithm to solve the Travelling Salesman Problem.
+ * This class implements the Algorithm interface found in the Simulator package.
+ */
 public class ACO implements Algorithm {
 
     private double simulationTime;
@@ -86,7 +91,7 @@ public class ACO implements Algorithm {
             System.out.println("Error: Too few input arguments");
             System.exit(1);
         }
-        if(!args[0].equals("-r") && !args[0].equals("-f")){
+        if(!args[0].equals("-r") && !args[0].equals("-f") && !args[0].equals("-h")){
             System.out.println("Error: Invalid invocation -- use -r or -f, run with -h for help");
             System.exit(1);
         }
@@ -124,6 +129,83 @@ public class ACO implements Algorithm {
         }
         else if(args[0].equals("-f")){
             System.out.println("TODO: Read from file");
+            String filePath = args[1]; 
+            System.out.println(filePath);
+        
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(filePath));
+                
+                String firstLine = reader.readLine();
+                String[] specificArrayValues = firstLine.split(" ");
+                int matrixSize = Integer.parseInt(specificArrayValues[0]);
+                double n_param = Double.parseDouble(specificArrayValues[0]);
+                double[] specificArray = new double[specificArrayValues.length - 1];
+                
+                for (int i = 1; i < specificArrayValues.length; i++) {
+                    specificArray[i - 1] = Double.parseDouble(specificArrayValues[i]);
+                }
+                
+                double[][] matrix = new double[matrixSize][matrixSize];
+                
+                String line;
+                
+                for (int i = 0; i < matrixSize; i++) {
+                    line = reader.readLine();
+                    String[] rowValues = line.split(" ");
+                    
+                    for (int j = 0; j < matrixSize; j++) {
+                        matrix[i][j] = Double.parseDouble(rowValues[j]);
+                    }
+                }
+                G.setV(matrixSize);
+                for (int i = 0; i < matrixSize; i++) {
+                    for (int j = i; j < matrixSize; j++) {
+                        if (matrix[i][j] > 0.0) {
+                            G.addEdge(i,j,(int)matrix[i][j]);
+                        }
+                    }
+                }
+                params.put("invocation", 1.0);
+                params.put("n", n_param);
+                params.put("n1", specificArray[0]);
+                params.put("alfa", specificArray[1]);
+                params.put("beta", specificArray[2]);
+                params.put("delta", specificArray[3]);
+                params.put("miu", specificArray[4]);
+                params.put("ro", specificArray[5]);
+                params.put("gama", specificArray[6]);
+                params.put("niu", specificArray[7]);
+                simulationTime = specificArray[8];
+                
+                System.out.println("Specific Array: " + Arrays.toString(specificArray));
+                
+                System.out.println("Matrix:");
+                for (double[] row : matrix) {
+                    System.out.println(Arrays.toString(row));
+                }
+                
+                reader.close();
+                G.printGraph();
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (args[0].equals("-h")) {
+            System.out.println("System invocation:");
+            System.out.println("java -jar project.jar -r n a n1 alfa beta delta eta ro gama niu tau");
+            System.out.println("\tn: number of nodes in the graph");
+            System.out.println("\ta: maximum edge weight");
+            System.out.println("\tn1: the nest node");
+            System.out.println("\talpha: parameter concerning ant move event");
+            System.out.println("\tbeta: parameter concerning ant move event");
+            System.out.println("\tdelta: ant move time stamp exponential distribution mean");
+            System.out.println("\teta, pheromone evaporation time stamp exponential distribution mean");
+            System.out.println("\trho, pheromone evaporation level decrement");
+            System.out.println("\tgama: parameter concerning pheromone evaporation event");
+            System.out.println("\tniu: ant colony size");
+            System.out.println("\ttau: final instant");
+            System.out.println("java -jar project.jar -f <path-to-file>/filename.txt");
+            System.out.println("\tfilename.txt: text file with specified parameters and graph");
             System.exit(1);
         }
 
