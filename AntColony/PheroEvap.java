@@ -1,25 +1,37 @@
 package prelim.AntColony;
 
 import prelim.Simulation.*;
+
+/**
+ * Represents an event where pheromone evaporation occurs between two nodes.
+*/
 public class PheroEvap extends Event {
     private int s;
     private int d;
     private ACO colony;
 
+    /**
+     * Creates a new instance of the PheroEvap event.
+     *
+     * @param s            The source node ID.
+     * @param d            The destination node ID.
+     * @param currentTime  The current time of the simulation.
+     * @param colony       The ACO (Ant Colony Optimization) instance.
+     * @param pec          The PEC (Pheromone Evaporation Controller) instance.
+    */
     public PheroEvap(int s, int d, double currentTime, ACO colony, PEC pec){
-        System.out.println("Adding PheroEvap event:");
         this.s = s;
         this.d = d;
         this.colony = colony;
         this.timeStamp = currentTime + colony.expRandom(colony.getParam("miu"));
         this.pec = pec;
-        System.out.println("Ended event creation; Event timeStamp:" + this.timeStamp);
-        System.out.println();
     }
 
+    /**
+         * Simulates the PheroEvap event.
+    */
     @Override
     public void simulateEvent(){
-        System.out.println("Started PheroEvap event simulation:");
 
         colony.incrementEevents();
         //decrement pheromone level of adjacency s->d and d->s
@@ -39,8 +51,5 @@ public class PheroEvap extends Event {
         {
             pec.addEvPEC(new PheroEvap(s, d, timeStamp, colony, pec));          //only add one event beacuse adjacencies work in pairs, one event changes 2 adjacency nodes
         }
-
-        System.out.println("Ended event simulation");
-        System.out.println();
     }
 }

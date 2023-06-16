@@ -1,14 +1,25 @@
 package prelim.AntColony;
 
 import prelim.Simulation.*;
+
+/**
+* Represents an event where an ant moves to a target node.
+*/
 public class AntMove extends Event{
     private int target;
     private boolean completedCycle = false;
 
     Ant ant;
 
+    /**
+     * Creates a new instance of the AntMove event.
+     *
+     * @param ant          The ant associated with this event.
+     * @param id           The ID of the ant.
+     * @param currentTime  The current time of the simulation.
+     * @param pec          The PEC (Pheromone Evaporation Controller) instance.
+    */
     public AntMove(Ant ant, int id, double currentTime, PEC pec){
-        System.out.println("Starting event AntMove creation:");
 
         //find ant with id in ACO.ants (ants are ordered by id, so the .get method is enough)
         this.ant = ant;
@@ -21,11 +32,9 @@ public class AntMove extends Event{
             this.completedCycle = true;
         }
 
-        System.out.println("target is: " + this.target);
 
         //code to determine timeStamp
 
-        System.out.println("ant.getPath():" + ant.getPath());
         //find adjacency node with id==target in ACO.G.adj 
         
         if(this.target == ant.nest)     // in this case, J set is not empty (because n1 is on J set even if already visited) but a cycle is completed because n1 is always the start node, meaning that visiting again completes a cycle
@@ -34,15 +43,13 @@ public class AntMove extends Event{
         }
 
         this.timeStamp = currentTime + ant.expRandom(ant.getParam("delta")*ant.getWeightOfEdge(ant.getLastInPath(), this.target));
-        System.out.println("Event timeStamp:" + this.timeStamp);
-        System.out.println("Ended event creation");
-        System.out.println();
     }
 
+    /**
+     * Simulates the AntMove event.
+    */
     @Override
     public void simulateEvent(){
-        System.out.println("Started event simulation:");
-        System.out.println("J set was:" + ant.getJ());
 
         ant.incrementMevents();
 
@@ -53,11 +60,7 @@ public class AntMove extends Event{
 
         ant.addToPath(target);
         ant.updateJ();
-        System.out.println("added:" + target + " to ant:" + ant.id + " with new J set:" + ant.J);
-        System.out.println("Ended event simulation");
-        System.out.println();
 
-        System.out.println("Adding AntMove event:");
         pec.addEvPEC(new AntMove(ant, ant.id, timeStamp, pec));
     }
 }

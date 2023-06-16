@@ -1,16 +1,29 @@
 package prelim.AntColony;
 
 import prelim.Simulation.*;
+
+    /**
+     * Represents an event for printing observation information.
+    */
 public class PrintObservation extends Event{
     private int num;
     private ACO colony;
 
+    /**
+     * Creates a new instance of the PrintObservation event.
+     *
+     * @param colony     The ACO (Ant Colony Optimization) instance.
+     * @param num        The observation number.
+     * @param timeStamp  The timestamp of the observation.
+     */
     public PrintObservation(ACO colony, int num, double timeStamp){
         this.timeStamp = timeStamp;
         this.colony = colony;
         this.num = num;
     }
-
+    /**
+         * Simulates the PrintObservation event.
+         */
     @Override
     public void simulateEvent(){
         System.out.println("Observation " + num + ":");

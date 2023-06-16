@@ -6,8 +6,7 @@ import prelim.Graphs.*;
 import java.util.*;
 import java.io.*;
 /**
- * This class implements an Ant Colony Optimization algorithm to solve the Travelling Salesman Problem.
- * This class implements the Algorithm interface found in the Simulator package.
+ * ACO (Ant Colony Optimization) algorithm implementation.
  */
 public class ACO implements Algorithm {
 
@@ -31,28 +30,46 @@ public class ACO implements Algorithm {
 
     Random random = new Random();
 
+    /**
+     * This function generates a pseudo-random number, sampled from an exponential distribution
+     * @param m mean value of the exponential distribution
+     * @return pseudo-random number, sampled from an exponential distribution with mean value m
+     */
+
     public double expRandom(double m)
     {
         double next = random.nextDouble();
         return -m*Math.log(1.0 - next);
     }
 
+    /**
+     * ACO constructor - initializes some attributes
+     */
     public ACO(){
         ants = new ArrayList<Ant>();
         phero = new HashMap<Edge, Double>();
         params = new HashMap<String, Double>();
     }
 
+    /**
+     * An ant index corresponds to its id. This function retrieves the ant with the given index
+     * @param index
+     * @return ant object with the provided id/index
+     */
     public Ant getAnt(int index){
         return ants.get(index);
     }
 
+    /**
+     * Initializes the ACO algorithm and adds initial events to the PEC.
+     *
+     * @param pec the PEC (Priority Event Container) for scheduling events
+     */
     @Override
     public void init(PEC pec){
 
         for (int i = 0; i < G.getV(); i++) {
             for (int j = 0; j < G.getNumberOfAdjacenciesOf(i); j++) {
-                System.out.println(G.getAdjacenciesOf(i).get(j) + "i: " + i + "j: " + j);
                 phero.put(G.getAdjacenciesOf(i).get(j), 0.0);
             }
         }
@@ -67,6 +84,9 @@ public class ACO implements Algorithm {
         }
     }
 
+    /**
+     * Prints the input parameters of the algorithm.
+     */
     @Override
     public void printParameters(){
         System.out.println("Input parameters:");
@@ -85,6 +105,11 @@ public class ACO implements Algorithm {
         G.printGraph();
     }
 
+    /**
+     * Reads the input arguments and sets the algorithm parameters.
+     *
+     * @param args the input arguments
+     */
     @Override
     public void readInputs(String[] args){
         if (args.length < 1) {
@@ -128,9 +153,7 @@ public class ACO implements Algorithm {
             G.fillWithRandomAdjacencies(Integer.parseInt(args[2]));
         }
         else if(args[0].equals("-f")){
-            System.out.println("TODO: Read from file");
             String filePath = args[1]; 
-            System.out.println(filePath);
         
             try {
                 BufferedReader reader = new BufferedReader(new FileReader(filePath));
@@ -177,15 +200,8 @@ public class ACO implements Algorithm {
                 params.put("niu", specificArray[7]);
                 simulationTime = specificArray[8];
                 
-                System.out.println("Specific Array: " + Arrays.toString(specificArray));
-                
-                System.out.println("Matrix:");
-                for (double[] row : matrix) {
-                    System.out.println(Arrays.toString(row));
-                }
                 
                 reader.close();
-                G.printGraph();
             }catch (IOException e) {
                 e.printStackTrace();
             }
@@ -212,15 +228,32 @@ public class ACO implements Algorithm {
         G.validateWeights();
     }
 
+    /**
+     * Returns the simulation time.
+     *
+     * @return the simulation time
+     */
     @Override
     public double getSimulationTime(){
         return simulationTime;
     }
 
+    /**
+     * Sets the graph for the ACO algorithm.
+     *
+     * @param graph the graph object
+     */
     public static void setGraph(Graph graph){
         G = graph;
     }
 
+    /**
+     * Retrieves the pheromone level of the specified edge between two nodes.
+     *
+     * @param s the source node
+     * @param d the destination node
+     * @return the pheromone level of the edge
+     */
     public double getPheroOfEdge(int s, int d){
         Edge currentAdjNode = G.getAdjacenciesOf(s).get(0); //default as first
 
@@ -233,6 +266,13 @@ public class ACO implements Algorithm {
         return phero.get(currentAdjNode);
     }
 
+    /**
+     * Sets the pheromone level of the specified edge between two nodes.
+     *
+     * @param s     the source node
+     * @param d     the destination node
+     * @param level the pheromone level to set
+     */
     public void setPheroOfEdge(int s, int d, double level){
         Edge currentAdjNode = G.getAdjacenciesOf(s).get(0); //default as first
 
@@ -246,37 +286,60 @@ public class ACO implements Algorithm {
         phero.put(currentAdjNode, level);
     }
 
+    /**
+     * Increments the number of movement events.
+     */
     public void incrementMevents(){
         mevents+=1;
     }
 
+    /**
+     * Increments the number of evaporation events.
+     */
     public void incrementEevents(){
         eevents+=1;
     }
 
+    /**
+     * Retrieves the number of movement events.
+     *
+     * @return the number of movement events
+     */
     public int getMevents(){
         return mevents;
     }
 
+    /**
+     * Retrieves the number of evaporation events.
+     *
+     * @return the number of evaporation events
+     */
     public int getEevents(){
         return eevents;
     }
 
+    /**
+     * Updates the best path with the specified path.
+     *
+     * @param path the new best path
+     */
     public void updateBestPath(List<Integer> path){
         bestPath.removeAll(bestPath);
         bestPath.addAll(path);
     }
 
+    /**
+     * Adds a Hamiltonian cycle to the list of Hamiltonians.
+     *
+     * @param path the Hamiltonian cycle path
+     * @param cost the cost of the Hamiltonian cycle
+     */
     public void addHamilton(ArrayList<Integer> path, int cost){
-        System.out.println("Received Path:" + path);
         if(!duplicateHamilton(path)){
-            System.out.println("Adding new hamilton");
             //needs to be done like this - if added directly, the reference is copied and not the content, meaning that a change to the ant path woukd change the hamiltons list
             ArrayList<Integer> toAdd = new ArrayList<Integer>();
             toAdd.addAll(path);
-            System.out.println("hamiltonsCosts: " + hamiltonCosts.size());
             int index = binarySearch(hamiltonCosts, 0, hamiltonCosts.size() - 1, cost);
-            System.out.println("index: " + index);
             if (index > 4) {
                 return;
             }
@@ -286,37 +349,58 @@ public class ACO implements Algorithm {
                 hamiltons.subList(5, hamiltons.size() - 1).clear();
                 hamiltonCosts.subList(5, hamiltonCosts.size() - 1).clear();
             }
-            System.out.println("New hamilton list: " + hamiltons);
         }
     }
 
+    /**
+     * Updates the weight of the best path.
+     *
+     * @param newWeight the new weight of the best path
+     */
     public void updateBestPathWeight(int newWeight){
         bestPathWeight = newWeight;
     }
 
+    /**
+     * Retrieves the weight of the best path.
+     *
+     * @return the weight of the best path
+     */
     public int getBestPathWeight(){
         return bestPathWeight;
     }
 
+    /**
+     * Retrieves the list of Hamiltonian cycles.
+     *
+     * @return the list of Hamiltonian cycles
+     */
     public ArrayList<ArrayList<Integer>> getHamiltons(){
         return hamiltons;
     }
 
+    /**
+     * Retrieves the list of costs for the Hamiltonian cycles.
+     *
+     * @return the list of costs for the Hamiltonian cycles
+     */
     public ArrayList<Integer> getHamiltonCosts(){
         return hamiltonCosts;
     }
 
+    /**
+     * Retrieves the best path.
+     *
+     * @return the best path
+     */
     public List<Integer> getBestPath(){
         return bestPath;
     }
 
     private boolean duplicateHamilton(ArrayList<Integer> path){
-        System.out.println("Path: " + path);
-        System.out.println("Hamiltons: " + hamiltons);
         int flag = 0;
         //iterate over all hamiltons
         for (int i = 0; i < hamiltons.size(); i++) {
-            System.out.println("Current Hamilton: " + hamiltons.get(i));
             flag = 0;
             //check if all elements match
             for (int j = 0; j < hamiltons.get(i).size(); j++) {
@@ -335,6 +419,12 @@ public class ACO implements Algorithm {
         return false;
     }
 
+    /**
+     * Retrieves the value of the specified parameter.
+     *
+     * @param param the parameter name
+     * @return the value of the parameter
+     */
     public double getParam(String param){
         return params.get(param);
     }

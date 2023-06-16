@@ -4,28 +4,37 @@ import java.util.*;
 public class ArrayListGraph extends Graph{
 
     private ArrayList<ArrayList<Edge>> adj;
-
-    public ArrayListGraph(){
+    /**
+    * The ArrayListGraph class represents a graph using an Matrix of adjacency implemented with an ArrayList.
+    */
+    public ArrayListGraph()
+    {
         // Create the ArrayListGraph
         this.adj = new ArrayList<ArrayList<Edge>>();
     }
 
-        // Add edge(source, destination, weight, pheromone level)
-    public void addEdge(int s, int d, int w) {
-        System.out.println("size: " + adj.size());
+    /**
+     * Adds an edge to the graph with the specified source, destination, and weight.
+     *
+     * @param s The source node index.
+     * @param d The destination node index.
+     * @param w The weight of the edge.
+     */
+    public void addEdge(int s, int d, int w) 
+    {
         while (adj.size() - 1 < s) {
-            System.out.println("adding head in s");
             adj.add(new ArrayList<Edge>());
         }
         while (adj.size() - 1 < d) {
-            System.out.println("adding head in d");
             adj.add(new ArrayList<Edge>());
         }
         adj.get(s).add(new Edge(d, w));
         adj.get(d).add(new Edge(s, w));
     }
 
-    // Print the Graph
+    /**
+     * Prints the graph.
+     */
     public void printGraph() {
         System.out.print("\twith graph:");
         for (int i = 0; i < V; i++) {
@@ -53,7 +62,8 @@ public class ArrayListGraph extends Graph{
     }
 
     /**
-     * @param 
+     * Validates the weights of the graph.
+     * Checks if all weights are non-zero positive integers.
      */
     public void validateWeights(){
         for (int i = 0; i < adj.size(); i++) {
@@ -65,19 +75,32 @@ public class ArrayListGraph extends Graph{
             }
         }
     }
-
+    /**
+     * Returns the number of adjacencies of the specified node.
+     *
+     * @param nodeIndex The index of the node.
+     * @return The number of adjacencies of the node.
+     */
     public int getNumberOfAdjacenciesOf(int nodeIndex){
         return adj.get(nodeIndex).size();
     }
-
+    /**
+     * Returns a list of edges representing the adjacencies of the specified node.
+     *
+     * @param index The index of the node.
+     * @return The list of edges representing the adjacencies of the node.
+     */
     public List<Edge> getAdjacenciesOf(int index){
         return adj.get(index);
     }
-
+    /**
+     * Fills the graph with random adjacencies with weights up to the specified maximum weight.
+     *
+     * @param maxWeight The maximum weight of the adjacencies.
+     */
     public void fillWithRandomAdjacencies(int maxWeight){
         Random random = new Random();
         int weight = 0;
-        System.out.println("V: " + V);
         for (int i = 0; i < V; i++) {
             for (int j = i+1; j < V; j++) {
                 weight = random.nextInt(maxWeight + 1);
@@ -86,7 +109,6 @@ public class ArrayListGraph extends Graph{
                 }
             }
         }
-        System.out.println("printing graph");
         printGraph();
         if(!checksDiracsTheorem()){
             for (int i = 0; i < V; i++) {
@@ -95,7 +117,13 @@ public class ArrayListGraph extends Graph{
             fillWithRandomAdjacencies(maxWeight);
         }
     }
-
+     /**
+     * Returns the weight of the edge between the specified source and destination nodes.
+     *
+     * @param s The source node index.
+     * @param d The destination node index.
+     * @return The weight of the edge.
+     */
     public int getWeightOfEdge(int s, int d){
         Edge currentAdjNode = getAdjacenciesOf(s).get(0); //default as first
 
@@ -108,7 +136,11 @@ public class ArrayListGraph extends Graph{
         }
         return currentAdjNode.getWeight();
     }
-
+    /**
+     * Calculates and returns the sum of weights of all edges in the graph.
+     *
+     * @return The sum of weights of all edges.
+     */
     @Override
     public int getSumOfAllWeights(){
         int cnt = 0;

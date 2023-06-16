@@ -4,6 +4,11 @@ import prelim.Simulation.*;
 import prelim.Graphs.*;
 import prelim.AntColony.*;
 
+/**
+ * The Simulator class represents the main class of the simulation application.
+ * It initializes the simulation environment, executes the simulation cycle,
+ * and manages the events and time in the simulation.
+ */
 public class Simulator {
 
     private static double currentTime;
@@ -13,6 +18,12 @@ public class Simulator {
 
     private static Algorithm algorithm;
 
+        /**
+     * The main method of the Simulator class, which starts the simulation.
+     *
+     * @param args The command-line arguments.
+     * @throws Exception If an error occurs during the simulation.
+     */
     public static void main(String[] args) throws Exception {
 
         pec = PEC.getInstance();
@@ -33,7 +44,6 @@ public class Simulator {
         //find event with lowest timeStamp (calculated inside pec.nextEvPEC method)
         currentEvent = pec.nextEvPEC();
         currentTime = currentEvent.getTimeStamp();
-        System.out.println("start:" + currentTime);
 
         //simulation cycle
         while(currentTime <= algorithm.getSimulationTime())
